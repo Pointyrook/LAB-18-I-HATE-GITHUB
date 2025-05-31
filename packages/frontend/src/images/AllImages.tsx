@@ -1,9 +1,8 @@
-
-import { type IImageData } from "../MockAppData.ts";
+import { type IApiImageData } from "../../../backend/src/shared/ApiImageData.ts";
 import { ImageGrid } from "./ImageGrid.tsx";
 
 interface IAllImagesProps {
-    imageData: IImageData[];
+    imageData: IApiImageData[];
 }
 
 export function AllImages(props: IAllImagesProps) {

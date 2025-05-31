@@ -1,5 +1,5 @@
 export const ValidRoutes = {
-    HOME: "/home",
+    HOME: "/",
     LOGIN: "/login",
     UPLOAD: "/upload",
     IMAGE: "/images/:imageId"

@@ -1,0 +1,54 @@
+### Get all images
+# This is a comment
+GET http://localhost:3000/api/images
+
+### A second example.  Each request must be delimited by a triple hash
+POST http://localhost:3000/api/test
+Content-Type: application/json # Content-Type header is a must if you're sending JSON
+# Request body separated from headers by newline
+
+{ "a": 1, "b": 2 }
+
+### Query images for substring of name
+GET http://localhost:3000/api/images/q?nameContains=substring
+Content-Type: application/json
+
+### Edit the name of an image
+PUT http://localhost:3000/api/images/6838bf82d862dcaaff3d07ad
+Content-Type: application/json
+
+{
+  "name": "abcdefg"
+}
+
+### Image not found error test
+PUT http://localhost:3000/api/images/abcdefg
+Content-Type: application/json
+
+{
+  "name": "abcdefg"
+}
+
+### Bad request error test
+PUT http://localhost:3000/api/images/6838bf82d862dcaaff3d07ad
+Content-Type: application/json
+
+{
+  "name": ""
+}
+
+### Name too long error test
+PUT http://localhost:3000/api/images/6838bf82d862dcaaff3d07ad
+Content-Type: application/json
+
+{
+  "name": "jsdhfakjdsghdlakjdskjghdlghafdghfkgfhdjgsdfhgdhgsfhgjhgjsdhfgsfhjdkghsfdghjsdhlkgjdsfhgklfsghfjkdlghkgghjkfghjghsdhlgfsghfjghdjskghlsdgfjsdhfakjdsghdlakjdskjghdlghafdghfkgfhdjgsdfhgdhgsfhgjhgjsdhfgsfhjdkghsfdghjsdhlkgjdsfhgklfsghfjkdlghkgghjkfghjghsdhlgfsghfjghdjskghlsdgf"
+}
+
+### Reset the test image
+PUT http://localhost:3000/api/images/6838bf82d862dcaaff3d07ad
+Content-Type: application/json
+
+{
+  "name": "Blue merle herding sheep"
+}
