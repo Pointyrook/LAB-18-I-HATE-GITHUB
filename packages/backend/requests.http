@@ -10,19 +10,20 @@ Content-Type: application/json # Content-Type header is a must if you're sending
 { "a": 1, "b": 2 }
 
 ### Query images for substring of name
-GET http://localhost:3000/api/images/q?nameContains=substring
+# Not really sure what this is supposed to return to the console, but it works as a URL
+GET https://espetrov.csse.dev/api/images/q?nameContains=substring
 Content-Type: application/json
 
 ### Edit the name of an image
-PUT http://localhost:3000/api/images/6838bf82d862dcaaff3d07ad
+PUT https://espetrov.csse.dev/api/images/6838bf82d862dcaaff3d07ad
 Content-Type: application/json
 
 {
-  "name": "abcdefg"
+  "name": "bruh"
 }
 
 ### Image not found error test
-PUT http://localhost:3000/api/images/abcdefg
+PUT https://espetrov.csse.dev/api/images/abcdefg
 Content-Type: application/json
 
 {
@@ -30,7 +31,7 @@ Content-Type: application/json
 }
 
 ### Bad request error test
-PUT http://localhost:3000/api/images/6838bf82d862dcaaff3d07ad
+PUT https://espetrov.csse.dev/api/images/6838bf82d862dcaaff3d07ad
 Content-Type: application/json
 
 {
@@ -38,7 +39,7 @@ Content-Type: application/json
 }
 
 ### Name too long error test
-PUT http://localhost:3000/api/images/6838bf82d862dcaaff3d07ad
+PUT https://espetrov.csse.dev/api/images/6838bf82d862dcaaff3d07ad
 Content-Type: application/json
 
 {
@@ -46,7 +47,7 @@ Content-Type: application/json
 }
 
 ### Reset the test image
-PUT http://localhost:3000/api/images/6838bf82d862dcaaff3d07ad
+PUT https://espetrov.csse.dev/api/images/6838bf82d862dcaaff3d07ad
 Content-Type: application/json
 
 {
