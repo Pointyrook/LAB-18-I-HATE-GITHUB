@@ -1,0 +1,88 @@
+### Test the backend authentication
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{ "username": "newUser", "password": "password" }
+
+### Test a bad request (400)
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{ "balls": "balls" }
+
+### Test a duplicate username (409)
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{ "username": "newUser", "password": "password" }
+
+### Test an incorrect password
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{ "username": "newUser", "password": "wrongPassword" }
+
+### Test an incorrect username but correct password
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{ "username": "wrongUser", "password": "password" }
+
+### Test an incorrect username and incorrect password
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{ "username": "wrongUser", "password": "wrongPassword" }
+
+### Test a login token
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{ "username": "newUser", "password": "password" }
+
+### Test a bad login request
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{ "balls": "balls" }
+
+### Test an incorrect password when logging in
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{ "username": "newUser", "password": "wrongPassword" }
+
+### Test the validity of an authentication token
+GET http://localhost:3000/api/images
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im5ld1VzZXIiLCJpYXQiOjE3NDkwMTU0MzUsImV4cCI6MTc0OTEwMTgzNX0.o7CueoJ6390NRyG3oZwqEYIc9ZgdXfWDi_O4JHTHShI
+
+### Add user chunkylover23
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{ "username": "chunkylover23", "password": "chunkylover23password" }
+
+### Log in as user chunkylover23
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{ "username": "chunkylover23", "password": "chunkylover23password" }
+
+### Test the ability to edit chunkylover23's image when logged in as chunkylover23
+PUT http://localhost:3000/api/images/6838bf82d862dcaaff3d07ad
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNodW5reWxvdmVyMjMiLCJpYXQiOjE3NDkwODMxODgsImV4cCI6MTc0OTE2OTU4OH0.tA5F12a-lK5ebtZU6lAnEHjMISiqFIXZy4lz9i1iVSI
+
+{
+  "name": "Blue merle herding sheep"
+}
+
+
+### Test the ability to edit Tabby Cat's image when logged in as chunkylover23
+PUT http://localhost:3000/api/images/6838bf82d862dcaaff3d07b0
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNodW5reWxvdmVyMjMiLCJpYXQiOjE3NDkwODMxODgsImV4cCI6MTc0OTE2OTU4OH0.tA5F12a-lK5ebtZU6lAnEHjMISiqFIXZy4lz9i1iVSI
+
+{
+  "name": "aksfksda"
+}

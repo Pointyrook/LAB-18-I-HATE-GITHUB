@@ -7,3 +7,6 @@
 .LoginPage-form > input[type="submit"] {
     margin-top: 1em;
 }
+.errorText {
+    color: red;
+}

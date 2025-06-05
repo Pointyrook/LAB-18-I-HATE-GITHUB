@@ -32,9 +32,10 @@ export function registerImageRoutes(app: express.Application, imageProvider: Ima
         if (ObjectId.isValid(req.params.id)) {
             const imageId = new ObjectId(req.params.id);
             const newName = req.body.name as string;
+            const username = req.user?.username;
 
             // BAD REQUEST check
-            if (!newName || newName.trim() === "") {
+            if (!newName || newName.trim() === "" || !username) {
                 res.status(400).send({
                     error: "Bad Request",
                     message: "Details about exactly how the request was malformed"
@@ -51,14 +52,22 @@ export function registerImageRoutes(app: express.Application, imageProvider: Ima
             }
 
             await waitDuration(1000);
-            await imageProvider.updateImageName(imageId, newName)
+            await imageProvider.updateImageName(imageId, newName, username)
                 .then((response) => {
-                    if (response === 0) {
+                    if (response === -1) {
+                        res.status(401).send({
+                            error: "Unauthorized",
+                            message: "Only the owner of this image can edit it."
+                        })
+                        return;
+                    }
+                    else if (response === 0) {
                         // IMAGE NOT FOUND check
                         res.status(404).send({
                             error: "Not Found",
                             message: "Image does not exist"
                         });
+                        return;
                     }
                     res.status(204).send();
                 });

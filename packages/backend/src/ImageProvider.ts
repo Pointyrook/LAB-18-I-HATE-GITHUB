@@ -58,9 +58,30 @@ export class ImageProvider {
         }
     }
 
-    async updateImageName(imageId: ObjectId, newName: string): Promise<number> {
+    async updateImageName(imageId: ObjectId, newName: string, username: string): Promise<number> {
         // Do keep in mind the type of _id in the DB is ObjectId
+        const isAllowedToEdit = await this.confirmAuthorship(imageId, username);
+        if (!isAllowedToEdit) {
+            console.error("User is not authorized to edit this image.");
+            return -1;
+        }
+        const image = await this.collection.findOne({ _id: imageId });
+
         const documentation = await this.collection.updateOne({_id: imageId}, {$set: {name: newName}});
         return documentation.matchedCount;
+    }
+
+    async confirmAuthorship(imageId: ObjectId, username: string): Promise<boolean> {
+        try {
+            const image = await this.collection.findOne({ _id: imageId });
+            if (!image) {
+                return false;
+            }
+            return image.authorId === username;
+        }
+        catch (error) {
+            console.error(error);
+            return false;
+        }
     }
 }

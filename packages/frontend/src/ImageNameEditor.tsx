@@ -13,7 +13,15 @@ export function ImageNameEditor(props: INameEditorProps) {
     async function handleSubmitPressed() {
         console.log("Fetching (from ImageNameEditor)...");
         setIsFetching(true);
-        await fetch("/api/images")
+        await fetch("/api/images/" + props.imageId, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                name: input
+            }),
+        })
             .then((response) => {
                 if (!response.ok) {
                     console.error("Network response failed.")
