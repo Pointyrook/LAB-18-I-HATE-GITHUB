@@ -27,7 +27,12 @@ function App() {
         setFetching(true);
         // Code in here will run when App is created
         // (Note in dev mode App is created twice)
-        fetch("/api/images")
+        fetch("/api/images", {
+            method: "GET",
+            headers: {
+                "Authorization": "Bearer " + token,
+            }
+        })
             .then((response) => {
                 if (!response.ok) {
                     setError(true);
@@ -44,7 +49,7 @@ function App() {
                 setFetching(false);
             });
         setError(false);
-    }, []);
+    }, [token]);
 
     function updateToken(token: string) {
         setToken(token);
@@ -99,7 +104,7 @@ function App() {
                 <AllImages imageData={imageData} searchPanel={searchPanel}/>
             </ProtectedRoute>}/>
             <Route path={ValidRoutes.IMAGE} element={<ProtectedRoute authToken={token}>
-                <ImageDetails imageData={imageData} onNewName={updateImageData}/>
+                <ImageDetails imageData={imageData} onNewName={updateImageData} token={token}/>
             </ProtectedRoute>}/>
             <Route path={ValidRoutes.UPLOAD} element={<ProtectedRoute authToken={token}>
                 <UploadPage />

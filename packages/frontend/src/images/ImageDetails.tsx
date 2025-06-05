@@ -5,6 +5,7 @@ import {ImageNameEditor} from "../ImageNameEditor.tsx";
 interface IImageDetailsProps {
     imageData: IApiImageData[];
     onNewName: (id: string, newName: string) => void;
+    token: string;
 }
 
 export function ImageDetails(props: IImageDetailsProps) {
@@ -21,7 +22,7 @@ export function ImageDetails(props: IImageDetailsProps) {
         <>
             <h2>{image.name}</h2>
             <p>By {image.author.username}</p>
-            <ImageNameEditor initialValue={image.name} imageId={image._id} onNewName={props.onNewName}/>
+            <ImageNameEditor initialValue={image.name} imageId={image._id} onNewName={props.onNewName} token={props.token}/>
             <img className="ImageDetails-img" src={image.src} alt={image.name} />
         </>
     )

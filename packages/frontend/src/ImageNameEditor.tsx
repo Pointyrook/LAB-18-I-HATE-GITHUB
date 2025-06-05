@@ -4,6 +4,7 @@ interface INameEditorProps {
     initialValue: string;
     imageId: string;
     onNewName: (id: string, newName: string) => void;
+    token: string;
 }
 
 export function ImageNameEditor(props: INameEditorProps) {
@@ -13,28 +14,36 @@ export function ImageNameEditor(props: INameEditorProps) {
     async function handleSubmitPressed() {
         console.log("Fetching (from ImageNameEditor)...");
         setIsFetching(true);
-        await fetch("/api/images/" + props.imageId, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                name: input
-            }),
-        })
-            .then((response) => {
-                if (!response.ok) {
-                    console.error("Network response failed.")
-                }
-            })
-            .then(() => {
-                props.onNewName(props.imageId, input);
-                setIsFetching(false);
-            })
-            .catch((error) => {
-                console.error(error);
-                setIsFetching(false);
+        try {
+            const response = await fetch("/api/images/" + props.imageId, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + props.token,
+                },
+                body: JSON.stringify({
+                    name: input
+                }),
             });
+
+            if (!response.ok) {
+                console.error("Network response failed.");
+                if (response.status === 401) {
+                    throw new Error("Unauthorized");
+                }
+                // Optionally you can throw here to jump to catch block:
+                // throw new Error("Network response failed.");
+            }
+
+            // If you want to wait for response body, you could do:
+            // const data = await response.json();
+
+            props.onNewName(props.imageId, input);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setIsFetching(false);
+        }
     }
 
     if (isEditingName) {

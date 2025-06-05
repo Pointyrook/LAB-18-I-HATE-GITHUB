@@ -68,6 +68,7 @@ export class ImageProvider {
         const image = await this.collection.findOne({ _id: imageId });
 
         const documentation = await this.collection.updateOne({_id: imageId}, {$set: {name: newName}});
+        console.log("image was updated?");
         return documentation.matchedCount;
     }
 
