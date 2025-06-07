@@ -85,4 +85,16 @@ export class ImageProvider {
             return false;
         }
     }
+
+    async createImage(src: string, name: string, authorId: string): Promise<boolean> {
+        if (!src || !name || !authorId) return false;
+        const newImage: IImageDocument = {
+            _id: new ObjectId(),
+            src: src,
+            name: name,
+            authorId: authorId,
+        }
+        await this.collection.insertOne(newImage);
+        return true;
+    }
 }

@@ -1,6 +1,7 @@
 import express, {Request, Response} from "express";
 import { ImageProvider } from "./ImageProvider";
 import {ObjectId} from "mongodb";
+import {handleImageFileErrors, imageMiddlewareFactory} from "./imageUploadMiddleware";
 
 export function registerImageRoutes(app: express.Application, imageProvider: ImageProvider) {
     const MAX_NAME_LENGTH = 100;
@@ -80,4 +81,46 @@ export function registerImageRoutes(app: express.Application, imageProvider: Ima
             });
         }
     })
+
+    app.post(
+        "/api/images",
+        imageMiddlewareFactory.single("image"),
+        handleImageFileErrors,
+        async (req: Request, res: Response) => {
+            // Final handler function after the above two middleware functions finish running
+            const file = req.file;
+            const filename = req.body.name;
+            const username = req.user?.username;
+
+            if (!file || !filename || !username) {
+                res.status(400).send({
+                    error: "Bad Request",
+                    message: "File, filename, or the user who uploaded it does not exist."
+                });
+                return;
+            }
+
+            const trueFilename = file.filename;
+
+            try {
+                const response = await imageProvider.createImage(`/uploads/${trueFilename}`, filename, username);
+                if (!response) {
+                    res.status(500).send({
+                        error: "Internal Server Error",
+                        message: "Image document could not be created."
+                    });
+                }
+                res.status(201).send();
+                return;
+            }
+            catch (error) {
+                console.log(error);
+                res.status(500).send({
+                    error: "Unknown error",
+                    message: "Something went wrong."
+                });
+                return;
+            }
+        }
+    );
 }

@@ -6,20 +6,29 @@ interface ICredentialsDocument {
     password: string;
 }
 
+interface IUserDocument {
+    _id: string,
+    username: string,
+    email: string,
+}
+
 export class CredentialsProvider {
-    private readonly collection: Collection<ICredentialsDocument>;
+    private readonly credentialsCollection: Collection<ICredentialsDocument>;
+    private usersCollection: Collection<IUserDocument>;
 
     constructor(mongoClient: MongoClient) {
-        const COLLECTION_NAME = process.env.CREDS_COLLECTION_NAME;
-        if (!COLLECTION_NAME) {
-            throw new Error("Missing CREDS_COLLECTION_NAME from env file");
+        const CREDS_COLLECTION_NAME = process.env.CREDS_COLLECTION_NAME;
+        const USERS_COLLECTION_NAME = process.env.USERS_COLLECTION_NAME;
+        if (!CREDS_COLLECTION_NAME || !USERS_COLLECTION_NAME) {
+            throw new Error("Missing a collection name from env file");
         }
-        this.collection = mongoClient.db().collection<ICredentialsDocument>(COLLECTION_NAME);
+        this.credentialsCollection = mongoClient.db().collection<ICredentialsDocument>(CREDS_COLLECTION_NAME);
+        this.usersCollection = mongoClient.db().collection<IUserDocument>(USERS_COLLECTION_NAME);
     }
 
     async registerUser(username: string, plaintextPassword: string) {
         console.log("Registering user...");
-        await this.collection.findOne({"username": username, "password": plaintextPassword})
+        await this.credentialsCollection.findOne({"username": username, "password": plaintextPassword})
             .then((response) => {
                 if (response) return true;
             });
@@ -27,12 +36,18 @@ export class CredentialsProvider {
         await bcrypt.genSalt(10)
             .then((salt) => bcrypt.hash(plaintextPassword, salt))
             .then((hashedPassword) => {
-                const newUser = {
+                const newUserCreds = {
                     _id: new ObjectId(),
                     username: username,
                     password: hashedPassword,
                 }
-                this.collection.insertOne(newUser);
+                const newUser = {
+                    _id: username,
+                    username: username,
+                    email: "madeUpEmail@nowhere.com",
+                }
+                this.credentialsCollection.insertOne(newUserCreds);
+                this.usersCollection.insertOne(newUser);
                 return true;
             })
             .catch((err) => {
@@ -45,7 +60,7 @@ export class CredentialsProvider {
         try {
             console.log("Verifying username...");
             const user =
-                await this.collection.findOne({"username": username});
+                await this.credentialsCollection.findOne({"username": username});
             if (!user) return false;
 
             console.log("Verifying password...");
@@ -58,7 +73,7 @@ export class CredentialsProvider {
     }
 
     async isUsernameTaken(username: string) {
-        const user = await this.collection.findOne({ "username": username });
+        const user = await this.credentialsCollection.findOne({ "username": username });
         return !!user;
     }
 }

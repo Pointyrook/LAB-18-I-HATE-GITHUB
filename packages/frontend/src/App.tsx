@@ -106,9 +106,9 @@ function App() {
             <Route path={ValidRoutes.IMAGE} element={<ProtectedRoute authToken={token}>
                 <ImageDetails imageData={imageData} onNewName={updateImageData} token={token}/>
             </ProtectedRoute>}/>
-            <Route path={ValidRoutes.UPLOAD} element={<ProtectedRoute authToken={token}>
-                <UploadPage />
-            </ProtectedRoute>}/>
+            <Route path={ValidRoutes.UPLOAD} element={/*<ProtectedRoute authToken={token}>*/
+                <UploadPage token={token}/>
+            /*</ProtectedRoute>*/}/>
             <Route path={ValidRoutes.REGISTER} element={<LoginPage isRegistering={true} onNewToken={updateToken}/>}/>
             <Route path={ValidRoutes.LOGIN} element={<LoginPage isRegistering={false} onNewToken={updateToken}/>}/>
         </Route>

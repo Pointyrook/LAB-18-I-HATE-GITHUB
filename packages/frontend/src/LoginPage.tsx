@@ -7,7 +7,7 @@ interface ILoginPageProps {
     onNewToken: (token: string) => void;
 }
 
-type formState = {
+export type formState = {
     type: string,
     message: string
 }
