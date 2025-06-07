@@ -114,7 +114,7 @@ export function registerImageRoutes(app: express.Application, imageProvider: Ima
                 return;
             }
             catch (error) {
-                console.log(error);
+                console.error(error);
                 res.status(500).send({
                     error: "Unknown error",
                     message: "Something went wrong."

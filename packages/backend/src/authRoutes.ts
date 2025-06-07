@@ -42,7 +42,6 @@ export function verifyAuthToken(
         res.status(401).end();
     } else { // JWT_SECRET should be read in index.ts and stored in app.locals
         jwt.verify(token, req.app.locals.JWT_SECRET as string, (error, decoded) => {
-            console.log(req.app.locals.JWT_SECRET);
             if (decoded) {
                 req.user = decoded as IAuthTokenPayload; // Modify the request for subsequent handlers
                 next();
@@ -60,9 +59,7 @@ export function registerAuthRoutes(app: express.Application, credProvider: Crede
     });
 
     app.post("/auth/register", async (req: Request, res: Response) => {
-        console.log("hi from authRoutes");
         const { username, password } = req.body;
-        console.log(username, password);
         if (!username || !password) {
             res.status(400).send({
                 error: "Bad request",
@@ -95,7 +92,6 @@ export function registerAuthRoutes(app: express.Application, credProvider: Crede
             return;
         }
 
-        console.log("authRoutes is about to verify the user.")
         try {
             const isVerified = await credProvider.verifyPassword(username, password);
 

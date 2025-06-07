@@ -17,7 +17,6 @@ const storageEngine = multer.diskStorage({
     },
     filename: function (req, file, cb) {
         const splitFileName = file.mimetype.split("/");
-        console.log(splitFileName);
         let fileExtension = "";
         switch (splitFileName[splitFileName.length - 1]) {
             case "png": fileExtension = "png"; break;
