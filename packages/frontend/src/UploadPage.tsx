@@ -46,7 +46,7 @@ export function UploadPage(props: IUploadPageProps) {
             if (!response.ok) {
                 const errorResult: formState = {type: "error", message: ""};
                 switch (response.status) {
-                    case 400: errorResult.message = "Invalid file type."; break;
+                    case 400: errorResult.message = "Bad request. Image too large, invalid file type, etc."; break;
                     case 500: errorResult.message = "Server error occurred. Please try again."; break;
                     default: errorResult.message = "Something went wrong. Please try again."; break;
                 }

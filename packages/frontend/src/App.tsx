@@ -71,6 +71,9 @@ function App() {
         setFetching(true);
         fetch(`/api/images/q?${params}`, {
             method: "GET",
+            headers: {
+                "Authorization": "Bearer " + token,
+            }
         })
             .then((response) => {
                 if (!response.ok) {
@@ -106,9 +109,9 @@ function App() {
             <Route path={ValidRoutes.IMAGE} element={<ProtectedRoute authToken={token}>
                 <ImageDetails imageData={imageData} onNewName={updateImageData} token={token}/>
             </ProtectedRoute>}/>
-            <Route path={ValidRoutes.UPLOAD} element={/*<ProtectedRoute authToken={token}>*/
+            <Route path={ValidRoutes.UPLOAD} element={<ProtectedRoute authToken={token}>
                 <UploadPage token={token}/>
-            /*</ProtectedRoute>*/}/>
+            </ProtectedRoute>}/>
             <Route path={ValidRoutes.REGISTER} element={<LoginPage isRegistering={true} onNewToken={updateToken}/>}/>
             <Route path={ValidRoutes.LOGIN} element={<LoginPage isRegistering={false} onNewToken={updateToken}/>}/>
         </Route>

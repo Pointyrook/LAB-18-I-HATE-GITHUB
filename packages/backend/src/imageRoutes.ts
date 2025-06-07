@@ -39,7 +39,7 @@ export function registerImageRoutes(app: express.Application, imageProvider: Ima
             if (!newName || newName.trim() === "" || !username) {
                 res.status(400).send({
                     error: "Bad Request",
-                    message: "Details about exactly how the request was malformed"
+                    message: "Image must be given a new name."
                 });
                 return;
             }
